@@ -7,31 +7,87 @@
 // Example: 5! = 5 x 4 x 3 x 2 x 1 = 120
 // factorial(5); // 120
 var factorial = function(n) {
+	if (n === 0){
+		return 1;
+	}else{
+	    return factorial(n-1) * n
+	}
 };
 
 // 2. Compute the sum of an array of integers.
 // sum([1,2,3,4,5,6]); // 21
 var sum = function(array) {
+	var result = 0
+	var helperFunction = function(i){
+		if(i<array.length){
+			result = result + array[i] 
+			helperFunction(i+1);	
+		}else{
+			return;
+		}
+	}
+	helperFunction(0)
+	return result;
 };
 
 // 3. Sum all numbers in an array containing nested arrays.
 // arraySum([1,[2,3],[[4]],5]); // 15
 var arraySum = function(array) {
+	var result = 0;
+	var helperFunction = function(array, i){
+		if(i<array.length){
+			if(Array.isArray(array[i])){
+				helperFunction(array[i], 0);
+			}else{
+				result = result + array[i];	
+			}
+			helperFunction(array, i+1);
+		}else{
+			return;
+		}
+	}
+	helperFunction(array, 0);
+	return result;
 };
 
 // 4. Check if a number is even.
 var isEven = function(n) {
+	return (n%2 ===0)
 };
 
 // 5. Sum all integers below a given integer.
 // sumBelow(10); // 45
 // sumBelow(7); // 21
 var sumBelow = function(n) {
+	var result = 0;
+	var helperFunction = function(i){
+		if(i>0){
+			result = result + i
+		}else{
+			return;
+		}
+		helperFunction(i-1);
+	}
+
+	helperFunction(n-1);
+	return result;
 };
 
 // 6. Get the integers within a range (x, y).
 // range(2,9); // [3,4,5,6,7,8]
 var range = function(x, y) {
+	var result = [];
+	var helperFunction = function(i){
+		if(i<y){
+			result.push(i)
+		}else{
+			return;
+		}
+		helperFunction(i+1);
+	}
+
+	helperFunction(x);
+	return result
 };
 
 // 7. Compute the exponent of a number.
@@ -40,6 +96,18 @@ var range = function(x, y) {
 // exponent(4,3); // 64
 // https://www.khanacademy.org/computing/computer-science/algorithms/recursive-algorithms/a/computing-powers-of-a-number
 var exponent = function(base, exp) {
+	var result = 1;
+	var helperFunction = function(round){
+		if(round<=exp){
+			result = result * base;
+		}else{
+			return;
+		}
+		helperFunction(round+1)
+	}
+
+	helperFunction(1);
+	return result;
 };
 
 // 8. Determine if a number is a power of two.
@@ -47,14 +115,50 @@ var exponent = function(base, exp) {
 // powerOfTwo(16); // true
 // powerOfTwo(10); // false
 var powerOfTwo = function(n) {
+	if(n === 1){
+	    return true;
+	}
+	var res = 2;
+	while(res<=n){
+		if(res === n){
+			return true;
+		}
+		res = res*2;
+	}
+	return false;
 };
 
+//"string" => "gnirts"
 // 9. Write a function that reverses a string.
 var reverse = function(string) {
+	var result = '';
+	var helperFunction = function(i){
+		if(i>=0){
+			result = result + string.charAt(i)
+			helperFunction(i-1)	
+		}else{
+			return;
+		}
+	}
+	helperFunction(string.length);
+	return result;
 };
 
 // 10. Write a function that determines if a string is a palindrome.
 var palindrome = function(string) {
+	var result = true;
+	var helperFunction = function(i) {
+		if(i<string.length/2+2){
+			if(string.charAt(i) !== string.charAt(string.length-1-i)){
+				result = result & false
+			}else{
+			    result = result & true
+			}
+			helperFunction(i+1);
+		}
+	}
+	helperFunction(0)
+	return result === 1?true:false;
 };
 
 // 11. Write a function that returns the remainder of x divided by y without using the
@@ -63,6 +167,16 @@ var palindrome = function(string) {
 // modulo(17,5) // 2
 // modulo(22,6) // 4
 var modulo = function(x, y) {
+	result = 0;
+	var helperFunction = function(y1){
+		if(y1+y>x){
+			return y1;
+		}else{
+			y1 = y1 + y;
+			helperFunction(y1)
+		}
+	}
+	return helperFunction(y);
 };
 
 // 12. Write a function that multiplies two numbers without using the * operator or
@@ -252,3 +366,30 @@ var mergeSort = function(array) {
 // obj1 === obj2 // false
 var clone = function(input) {
 };
+
+
+var del = function(array,i){
+    return array.splice(i, 1);
+}
+
+var combinations = function(initial_array, num) {
+  // Your code here.
+  var result = [];
+  var helperFunction = function(av_array, actual_array, roundsLeft){
+      if(roundsLeft === 0){
+          result.push(actual_array.slice(0));
+          return;
+      }
+      for(var i = 0; i<av_array.length; i++){
+          actual_array.push(av_array[i]);
+          var tempArray = av_array.slice(0);
+          del(tempArray,i);
+          helperFunction(tempArray, actual_array, roundsLeft-1);
+          actual_array.pop()
+      }
+  }
+  helperFunction(initial_array,[],num);
+  return result
+};
+
+combinations([2,5,6],3)
